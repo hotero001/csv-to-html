@@ -2,41 +2,41 @@
 
 class Player
 
-	attr_accessor :hand, :player_hand, :total, :deck
+  attr_accessor :hand, :player_hand, :total, :deck
   
   def initialize(name)
-  	@name = name
+    @name = name
     @deck = Deck.new.create_deck
     @hand = []
     @total = 0
   end
 
   def initial_dealing
-  	@hand = []
-  	@hand<<@deck.pop
-  	@hand<<@deck.pop
-  	@hand
+    @hand = []
+    @hand<<@deck.pop
+    @hand<<@deck.pop
+    @hand
   end
 
   def calculate_hand(hand)
-  	formatted_hand = hand.map {|e| e[0]}
-  	num_aces = formatted_hand.count("Ace")
+    formatted_hand = hand.map {|e| e[0]}
+    num_aces = formatted_hand.count("Ace")
     @total = 0
     formatted_hand.each do |e|
-    	if e == "Ace"
-    		@total += 11
-    	elsif e == "Jester"
-    		@total += 10
-    	elsif e == "Queen"
-    		@total += 10
-    	elsif e == "King"
-    		@total += 10
-    	else
-    		@total += e.to_i
-    	end
+      if e == "Ace"
+    	@total += 11
+      elsif e == "Jester"
+    	@total += 10
+      elsif e == "Queen"
+    	@total += 10
+      elsif e == "King"
+    	@total += 10
+      else
+    	@total += e.to_i
+      end
     end
     num_aces.times do
-    	@total -= 10 if total > 21
+      @total -= 10 if total > 21
     end
     @total
   end
@@ -44,22 +44,22 @@ end
 
 class John<Player
 
-	def player_hand
-		puts "#{@name} has drawn: "
+  def player_hand
+    puts "#{@name} has drawn: "
     puts @hand
     display_total
-	end
+  end
 
-	def display_total
+  def display_total
     calculate_hand(@hand)
     puts "#{@name} has a total of: #{@total}"
     hit_or_stay?
-	end
+  end
   
   def hit_or_stay?
-  	puts ""
+    puts ""
     while @total < 21
-    	puts "Would you like to hit, or stay? Type and enter h to hit, or s to stay: "
+      puts "Would you like to hit, or stay? Type and enter h to hit, or s to stay: "
       bet = gets.chomp.downcase
       system "clear"
       if bet == "h"
@@ -73,8 +73,8 @@ class John<Player
       else
       	hit_or_stay?
       end
-     end
-     @total
+    end
+    @total
   end
 end
 
@@ -87,51 +87,42 @@ class Dealer<Player
   end
 
   def dealer_hit_or_stay
-  	calculate_hand(@hand)
-  	puts ""
-  	while @total.to_i < 17 do
-  		puts "Dealer has chosen to hit"
-  		@hand<<@deck.pop
-  		calculate_hand(@hand)
-  	end
+    calculate_hand(@hand)
+    puts ""
+    while @total.to_i < 17 do
+      puts "Dealer has chosen to hit"
+      @hand<<@deck.pop
+      calculate_hand(@hand)
+    end
     @total
   end
 end
 
 class Deck
 
-	attr_accessor :deck
+  attr_accessor :deck
   
   def initialize
-  	@face_value = ["2","3","4","5","6","7","8","9","10","Jester","Queen","King","Ace"]
-  	@suit = ["of Clubs", "of Hearts", "of Diamonds", "of Spades"]
-  	@deck = @face_value.product(@suit).shuffle!
+    @face_value = ["2","3","4","5","6","7","8","9","10","Jester","Queen","King","Ace"]
+    @suit = ["of Clubs", "of Hearts", "of Diamonds", "of Spades"]
+    @deck = @face_value.product(@suit).shuffle!
     deck.shuffle!
-  end
-end
-
-class DetermineWinner
-
-	attr_accessor :player_total, :dealer_total
-
-  def winner_is?
-  	
   end
 end
 
 class Game
 
-	def initialize
-    @deck = Deck.new
-    @john = John.new("Barney")
-    @dealer = Dealer.new("Dealer Joe")
-    @outcome = DetermineWinner.new(@player_total, @dealer_total)
-  end
+  def initialize
+  @deck = Deck.new
+  @john = John.new("Barney")
+  @dealer = Dealer.new("Dealer Joe")
+  @outcome = DetermineWinner.new(@player_total, @dealer_total)
+end
 
   def intro
-  	puts ""
-  	puts "---Welcome to Blackjack!!!---"
-  	puts ""
+    puts ""
+    puts "---Welcome to Blackjack!!!---"
+    puts ""
   end
 
   def new_game?
@@ -140,13 +131,13 @@ class Game
     restart = gets.chomp.downcase
     puts ""
     if restart == "y"
-    	system "clear"
-    	play
+      system "clear"
+      play
     elsif restart == "n"
-    	puts "Thanks for playing!"
-    	exit
+      puts "Thanks for playing!"
+      exit
     else
-    	new_game?
+      new_game?
     end
   end
 
@@ -164,15 +155,3 @@ class Game
 end
 
 Game.new.play
-
-
-
-
-
-
-
-
-
-
-
-
